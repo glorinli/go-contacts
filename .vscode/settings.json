@@ -1,4 +1,14 @@
 {
     "go.buildOnSave": "off",
-    "go.formatTool": "gofmt"
+    "go.formatTool": "gofmt",
+    "go.lintOnSave": "off",
+    "go.vetOnSave": "off",
+
+    "[go]": {
+        "editor.formatOnSave": false
+    },
+
+    "go.alternateTools": {
+        "go-langserver": "gopls"
+     }
 }
