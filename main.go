@@ -1,16 +1,23 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"go-contacts/app"
-	"os"
 	"fmt"
 	"net/http"
+	"os"
+
+	"github.com/glorinli/go-contacts/controllers"
+
+	"github.com/glorinli/go-contacts/app"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	router := mux.NewRounter()
+	router := mux.NewRouter()
 	router.Use(app.JwtAuthentication)
+
+	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
+	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -19,7 +26,7 @@ func main() {
 
 	fmt.Println("Port is:", port)
 
-	err := http.ListenAndServe(":" + port, router)
+	err := http.ListenAndServe(":"+port, router)
 	if err != nil {
 		fmt.Print("Fail to start server", err)
 	}

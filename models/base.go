@@ -1,11 +1,11 @@
 package models
 
 import (
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/jinzhu/gorm"
-	"os"
-	"github.com/joho/godotenv"
 	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
+	"os"
 )
 
 // Database
@@ -34,9 +34,12 @@ func init() {
 	db = conn
 
 	// Database migration
-	db.Debug().AutoMigrage(&Account{}, $Contact{})	
+	db.Debug().AutoMigrate(&Account{}, &Contact{})
 }
 
+/*
+ GetDB Get a db instance
+*/
 func GetDB() *gorm.DB {
 	return db
 }
