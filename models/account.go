@@ -1,11 +1,12 @@
 package models
 
 import (
+	"os"
+	"strings"
+
 	"github.com/dgrijalva/jwt-go"
 	u "github.com/glorinli/go-contacts/utils"
-	"strings"
 	"github.com/jinzhu/gorm"
-	"os"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,13 +21,13 @@ type Token struct {
 // a struct to rep user account
 type Account struct {
 	gorm.Model
-	Email string `json: "email"`
+	Email    string `json: "email"`
 	Password string `json:"password"`
-	Token string `json:"token";sql:"-"`
+	Token    string `json:"token";sql:"-"`
 }
 
 // validate imcoming user details
-func (account *Account) Validate() (map[string] interface{}, bool) {
+func (account *Account) Validate() (map[string]interface{}, bool) {
 	if !strings.Contains(account.Email, "@") {
 		return u.Message(false, "Email address is required"), false
 	}
@@ -51,8 +52,8 @@ func (account *Account) Validate() (map[string] interface{}, bool) {
 	return u.Message(true, "Checking passed"), true
 }
 
-func (account *Account) Create() (map[string] interface{}) {
-	if resp, ok := account.Validate(); ok {
+func (account *Account) Create() map[string]interface{} {
+	if resp, ok := account.Validate(); !ok {
 		return resp
 	}
 
@@ -77,7 +78,7 @@ func (account *Account) Create() (map[string] interface{}) {
 	return response
 }
 
-func Login(email, password string) map[string] interface{} {
+func Login(email, password string) map[string]interface{} {
 	account := &Account{}
 	err := GetDB().Table("accounts").Where("email = ?", email).First(account).Error
 
@@ -118,4 +119,3 @@ func GetUser(u uint) *Account {
 	acc.Password = ""
 	return acc
 }
-
