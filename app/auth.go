@@ -17,7 +17,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Endpoints that need no authentication
-		notAuth := []string{"/api/user/new", "/api/user/login"}
+		notAuth := []string{"/api/user/new", "/api/user/login", "/api"}
 		requestPath := r.URL.Path
 
 		for _, value := range notAuth {
@@ -60,7 +60,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		// Auth ok
-		fmt.Sprintf("Use: %", tk.UserId)
+		fmt.Println("User:", tk.UserId)
 		ctx := context.WithValue(r.Context(), "user", tk.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
